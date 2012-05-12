@@ -11,6 +11,8 @@ capybara-*.html
 /public/system/*
 /coverage/
 /spec/tmp/*
+.generators
+.gitkeep
+/.idea
 **.orig
 rerun.txt
-pickle-email-*.html
