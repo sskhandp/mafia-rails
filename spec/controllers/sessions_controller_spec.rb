@@ -27,7 +27,7 @@ describe SessionsController do
   describe "#authenticate_user_on_facebook" do
     it "should compare given fb_user_id with id retrieved from facebook" do
       api = mock(Koala::Facebook::API)
-      api.should_receive(:get_object).with("me").and_return({"id" => "999999"}.to_json)
+      api.should_receive(:get_object).with("me").and_return({"id" => "999999"})
       Koala::Facebook::API.should_receive(:new).with("ACCESS_TOKEN").and_return(api)
 
       SessionsController.authenticate_user_on_facebook("999999", "ACCESS_TOKEN").should be_true
