@@ -20,7 +20,11 @@ class SessionsController < ApplicationController
 
   def self.authenticate_user_on_facebook(fb_user_id, fb_access_token)
     graph = Koala::Facebook::API.new(fb_access_token)
-    profile = JSON.parse(graph.get_object("me"))
+    begin
+      profile = JSON.parse(graph.get_object("me"))
+    rescue Exception => e
+      return false
+    end
     fb_user_id == profile["id"]
   end
 end
