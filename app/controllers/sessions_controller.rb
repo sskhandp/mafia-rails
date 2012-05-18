@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
           else
             user.update_attributes({:name => params["name"], :fb_access_token => params["fb_access_token"]})
             session[:user_id] = user.id
-            render :json => {}, :status => :success
+            render :json => {}, :status => :ok
           end
         else
           render :json => {:errors => {:type => "FacebookAuthentication", :messages => ["Could not authenticate user on facebook."]}}, :status => :unprocessable_entity
