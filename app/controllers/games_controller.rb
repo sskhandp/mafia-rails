@@ -2,12 +2,14 @@ class GamesController < ApplicationController
   def create
     respond_to do |type|
       type.json {
-        render :json => {:errors => {:type => "InvalidSession", :messages => ["Invalid user session"]}} if @current_user.blank?
-
+        if current_user.blank?
+          render :json => {:errors => {:type => "InvalidSession", :messages => ["Invalid user session"]}}
+          return
+        end
         begin
           Game.transaction do
-            game = Game.new(:owner => @current_user, :state => "pending")
-            game.build_membership(:user => @current_user)
+            game = Game.new(:owner => current_user, :state => "pending")
+            game.build_membership(:user => current_user)
             game.save
             if game.valid?
               render :json => {:game => game}, :status => :ok
@@ -22,12 +24,14 @@ class GamesController < ApplicationController
     end
   end
 
-  def show
+  def index
     respond_to do |type|
       type.json {
-        render :json => {:errors => {:type => "InvalidSession", :messages => ["Invalid user session"]}} if @current_user.blank?
-        games = Game.find_all_by_user_id(@current_user.id)
-        render :json => {games}, :status => :ok
+        if current_user.blank?
+          render :json => {:errors => {:type => "InvalidSession", :messages => ["Invalid user session"]}}
+          return
+        end
+        render :json => {:games => current_user.games}, :status => :ok
       }
     end
   end
