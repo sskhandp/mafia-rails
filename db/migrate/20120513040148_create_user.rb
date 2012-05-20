@@ -9,6 +9,8 @@ class CreateUser < ActiveRecord::Migration
   end
 
   def down
+    remove_index :users, :fb_user_id
+
     drop_table :users
   end
 end
