@@ -2,9 +2,10 @@ class GamesController < ApplicationController
   def create
     respond_to do |type|
       type.json {
+        render :json => {:errors => {:type => "InvalidSession", :messages => ["Invalid user session"]}} if @current_user.blank?
+
         begin
           Game.transaction do
-            raise "Invalid user session" if @current_user.blank?
             game = Game.new(:owner => @current_user, :state => "pending")
             game.build_membership(:user => @current_user)
             game.save
@@ -17,6 +18,16 @@ class GamesController < ApplicationController
         rescue Exception => e
           render :json => {:errors => {:type => "GameCreation", :messages => [e.messages]}}, :status => :unprocessable_entity
         end
+      }
+    end
+  end
+
+  def show
+    respond_to do |type|
+      type.json {
+        render :json => {:errors => {:type => "InvalidSession", :messages => ["Invalid user session"]}} if @current_user.blank?
+        games = Game.find_all_by_user_id(@current_user.id)
+        render :json => {games}, :status => :ok
       }
     end
   end
