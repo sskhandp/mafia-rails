@@ -3,6 +3,7 @@ class CreateMemberships < ActiveRecord::Migration
     create_table :memberships do |t|
       t.references :user
       t.references :game
+      t.string :state
     end
   end
 

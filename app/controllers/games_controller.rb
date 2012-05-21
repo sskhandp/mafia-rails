@@ -1,7 +1,5 @@
 class GamesController < ApplicationController
   def create
-    puts "SESSSION IS #{session.inspect}"
-    puts "CURRENT USER IS #{current_user}"
     respond_to do |type|
       type.json {
         if current_user.blank?
@@ -11,7 +9,7 @@ class GamesController < ApplicationController
         begin
           Game.transaction do
             game = Game.new(:owner => current_user, :state => "pending")
-            game.build_membership(:user => current_user)
+            game.memberships.build(:user => current_user, :state => "accepted")
             game.save
             if game.valid?
               render :json => {:game => game}, :status => :ok
@@ -20,7 +18,7 @@ class GamesController < ApplicationController
             end
           end
         rescue Exception => e
-          render :json => {:errors => {:type => "GameCreation", :messages => [e.messages]}}, :status => :unprocessable_entity
+          render :json => {:errors => {:type => "GameCreation", :messages => [e.message]}}, :status => :unprocessable_entity
         end
       }
     end
@@ -29,7 +27,6 @@ class GamesController < ApplicationController
   def index
     respond_to do |type|
       type.json {
-        puts "SESSSION IS #{session.inspect}"
         if current_user.blank?
           render :json => {:errors => {:type => "InvalidSession", :messages => ["Invalid user session"]}}
           return

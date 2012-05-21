@@ -2,6 +2,7 @@ class CreateGame < ActiveRecord::Migration
   def up
     create_table :games do |t|
       t.string :state, :stage
+      t.references :owner
       t.text :settings
       t.timestamps
     end

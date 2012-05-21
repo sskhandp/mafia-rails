@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(:version => 20120520203248) do
   create_table "games", :force => true do |t|
     t.string   "state"
     t.string   "stage"
+    t.integer  "owner_id"
     t.text     "settings"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -27,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20120520203248) do
   create_table "memberships", :force => true do |t|
     t.integer "user_id"
     t.integer "game_id"
+    t.string  "state"
   end
 
   create_table "users", :force => true do |t|
