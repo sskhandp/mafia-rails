@@ -27,6 +27,7 @@ class GamesController < ApplicationController
   def index
     respond_to do |type|
       type.json {
+        puts "SESSSION IS #{session.inspect}"
         if current_user.blank?
           render :json => {:errors => {:type => "InvalidSession", :messages => ["Invalid user session"]}}
           return
