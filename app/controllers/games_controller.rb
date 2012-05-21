@@ -1,5 +1,7 @@
 class GamesController < ApplicationController
   def create
+    puts "SESSSION IS #{session.inspect}"
+    puts "CURRENT USER IS #{current_user}"
     respond_to do |type|
       type.json {
         if current_user.blank?
